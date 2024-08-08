@@ -198,10 +198,12 @@ export default function ERCOrderTransactionRoute() {
           <label htmlFor="saleAmount">Sale Amount</label>
           <div>
             <Input
+              title="tokenAmount"
               required
               name="saleAmount"
               type="number"
               min={0}
+              step="any"
               aria-label="sale amount"
               placeholder="sale amount"
               value={formatUnits(saleAmount.amount, saleAmount.units)}
@@ -241,9 +243,11 @@ export default function ERCOrderTransactionRoute() {
           <div>
             <Input
               required
+              title="tokenAmount"
               name="buyAmount"
               type="number"
               min={0}
+              step="any"
               aria-label="buy amount"
               placeholder="buy amount"
               value={formatUnits(buyAmount.amount, buyAmount.units)}

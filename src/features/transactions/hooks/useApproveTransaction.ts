@@ -6,12 +6,9 @@ import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 export interface ApproveContractProps {
   tokenAddress: Address;
   amount: bigint;
-  // units: number;
 }
 
 export function useApproveTransaction() {
-  const marketplaceAddress = BOBSepoliaContractAddress;
-
   const {
     data: contractHash,
     writeContractAsync: approve,
@@ -31,14 +28,13 @@ export function useApproveTransaction() {
   const handleApprove = async ({
     tokenAddress,
     amount,
-    // units,
   }: ApproveContractProps) => {
     try {
       await approve({
         address: tokenAddress,
         abi: erc20Abi,
         functionName: "approve",
-        args: [marketplaceAddress, amount],
+        args: [BOBSepoliaContractAddress, amount],
       });
       console.log("Approval successful");
     } catch (error) {
