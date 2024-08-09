@@ -1,7 +1,8 @@
 import { Button, Heading, Input } from "@components";
 import { ApproveTransaction } from "@features/transactions/components/ApproveTransaction";
 import { useAcceptERCOrder } from "@features/transactions/hooks/useAcceptErcOrder";
-import { type SyntheticEvent, useCallback, useState } from "react";
+import { useCheckAllowanceAmount } from "@features/transactions/hooks/useCheckAllowanceAmount";
+import { type SyntheticEvent, useCallback, useMemo, useState } from "react";
 import { type Address, formatUnits } from "viem";
 
 interface AcceptErcOrderTxProps {
@@ -16,8 +17,17 @@ export function AcceptErcOrderTx({
   tokenAddress,
 }: AcceptErcOrderTxProps) {
   const [isApprovalPending, setIsApprovalPending] = useState(false);
+
+  const { allowance, isAllowanceLoading } =
+    useCheckAllowanceAmount(tokenAddress);
+
   const { isOrderAccepted, isOrderPending, acceptERCOrder } =
     useAcceptERCOrder();
+
+  const shouldRenderApproveButton = useMemo(
+    () => (!allowance || allowance < saleAmount) && !isAllowanceLoading,
+    [allowance, isAllowanceLoading, saleAmount]
+  );
 
   const handleSubmit = useCallback(
     async (e: SyntheticEvent) => {
@@ -37,11 +47,14 @@ export function AcceptErcOrderTx({
 
   return (
     <>
-      <ApproveTransaction
-        tokenAddress={tokenAddress}
-        amount={saleAmount}
-        setIsApprovalPending={setIsApprovalPending}
-      />
+      {/* TODO: turn this into a modal that launches from submit button */}
+      {shouldRenderApproveButton ? (
+        <ApproveTransaction
+          tokenAddress={tokenAddress}
+          amount={saleAmount}
+          setIsApprovalPending={setIsApprovalPending}
+        />
+      ) : null}
       <Heading>Accept ERC Order</Heading>
       <form
         onSubmit={handleSubmit}
