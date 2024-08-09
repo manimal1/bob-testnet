@@ -3,7 +3,6 @@ import {
   type ApproveContractProps,
   useApproveTransaction,
 } from "@features/transactions/hooks/useApproveTransaction";
-import { useCheckAllowanceAmount } from "@features/transactions/hooks/useCheckAllowanceAmount";
 import { type Dispatch, useCallback, useEffect } from "react";
 
 interface ApproveTransactionProps extends ApproveContractProps {
@@ -15,25 +14,21 @@ export function ApproveTransaction({
   amount,
   setIsApprovalPending,
 }: ApproveTransactionProps) {
-  const { allowance, isAllowanceLoading } =
-    useCheckAllowanceAmount(tokenAddress);
-
   const { isApprovalConfirmed, isApprovalPending, handleApprove } =
     useApproveTransaction();
 
   useEffect(() => {
-    if (isAllowanceLoading || isApprovalPending) {
+    if (isApprovalPending) {
       return setIsApprovalPending(true);
     }
 
     setIsApprovalPending(false);
-  }, [isAllowanceLoading, isApprovalPending, setIsApprovalPending]);
+  }, [isApprovalPending, setIsApprovalPending]);
 
-  const handleApproveTx = useCallback(async () => {
-    if (!allowance || allowance < amount) {
-      await handleApprove({ tokenAddress, amount });
-    }
-  }, [allowance, amount, tokenAddress, handleApprove]);
+  const handleApproveTx = useCallback(
+    async () => handleApprove({ tokenAddress, amount }),
+    [amount, tokenAddress, handleApprove]
+  );
 
   return (
     <section style={{ marginBottom: "2rem" }}>

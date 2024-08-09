@@ -1,6 +1,7 @@
 import { Button, Heading, Input } from "@components";
 import { Assets, USDC, WBTC } from "@contracts/assets";
 import { ApproveTransaction } from "@features/transactions/components/ApproveTransaction";
+import { useCheckAllowanceAmount } from "@features/transactions/hooks/useCheckAllowanceAmount";
 import { usePlaceERCOrder } from "@features/transactions/hooks/usePlaceERCOrder";
 import {
   type SyntheticEvent,
@@ -41,11 +42,6 @@ export default function ERCOrderTransactionRoute() {
   const { isOrderConfirmed, isOrderPending, placeERCOrder } =
     usePlaceERCOrder();
 
-  const isFormDisabled = useMemo(
-    () => isApprovalPending || isOrderPending,
-    [isApprovalPending, isOrderPending]
-  );
-
   const [formErrors, setFormErrors] = useState<FormErrors>({
     buyAmount: undefined,
     saleAmount: undefined,
@@ -61,6 +57,14 @@ export default function ERCOrderTransactionRoute() {
   const [saleAmount, setSaleAmount] = useState(defaultSaleAmount);
   const [buyingToken, setBuyingToken] = useState<Address>(WBTC.address);
   const [buyAmount, setBuyAmount] = useState<TokenAmount>(defaultBuyAmount);
+
+  const { allowance, isAllowanceLoading } =
+    useCheckAllowanceAmount(sellingToken);
+
+  const isFormDisabled = useMemo(
+    () => isApprovalPending || isOrderPending || isAllowanceLoading,
+    [isApprovalPending, isOrderPending]
+  );
 
   const options: Option[] = Assets.map((asset) => ({
     value: asset.address,
@@ -163,11 +167,14 @@ export default function ERCOrderTransactionRoute() {
 
   return (
     <>
-      <ApproveTransaction
-        tokenAddress={sellingToken}
-        amount={saleAmount.amount}
-        setIsApprovalPending={setIsApprovalPending}
-      />
+      {/* TODO: turn this into a modal that launches from submit button */}
+      {!allowance || allowance < saleAmount.amount ? (
+        <ApproveTransaction
+          tokenAddress={sellingToken}
+          amount={saleAmount.amount}
+          setIsApprovalPending={setIsApprovalPending}
+        />
+      ) : null}
       <Heading>Place ERC Order</Heading>
       <form
         onSubmit={handleSubmit}
