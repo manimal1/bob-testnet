@@ -1,4 +1,5 @@
 import { Button, Heading, Input } from "@components";
+import { Loader } from "@components/Loader";
 import { Assets, USDC, WBTC } from "@contracts/assets";
 import { ApproveTransaction } from "@features/transactions/components/ApproveTransaction";
 import { useCheckAllowanceAmount } from "@features/transactions/hooks/useCheckAllowanceAmount";
@@ -61,9 +62,14 @@ export default function ERCOrderTransactionRoute() {
   const { allowance, isAllowanceLoading } =
     useCheckAllowanceAmount(sellingToken);
 
+  const shouldRenderApproveButton = useMemo(
+    () => (!allowance || allowance < saleAmount.amount) && !isAllowanceLoading,
+    [allowance, isAllowanceLoading, saleAmount.amount]
+  );
+
   const isFormDisabled = useMemo(
     () => isApprovalPending || isOrderPending || isAllowanceLoading,
-    [isApprovalPending, isOrderPending]
+    [isApprovalPending, isOrderPending, isAllowanceLoading]
   );
 
   const options: Option[] = Assets.map((asset) => ({
@@ -167,8 +173,9 @@ export default function ERCOrderTransactionRoute() {
 
   return (
     <>
+      {isFormDisabled ? <Loader /> : null}
       {/* TODO: turn this into a modal that launches from submit button */}
-      {!allowance || allowance < saleAmount.amount ? (
+      {shouldRenderApproveButton ? (
         <ApproveTransaction
           tokenAddress={sellingToken}
           amount={saleAmount.amount}

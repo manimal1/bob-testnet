@@ -46,3 +46,37 @@ body {
   inherits: false;
   initial-value: #444;
 }
+
+.center-container {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0,0,0,.2);
+  top: 0;
+  left: 0;
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.loader {
+  border: 10px solid #f3f3f3db;
+  border-top: 10px solid var(--primary-color);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
