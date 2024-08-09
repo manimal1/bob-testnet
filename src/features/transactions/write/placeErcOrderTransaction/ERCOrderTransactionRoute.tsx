@@ -5,6 +5,13 @@ import { ApproveTransaction } from "@features/transactions/components/ApproveTra
 import { useCheckAllowanceAmount } from "@features/transactions/hooks/useCheckAllowanceAmount";
 import { usePlaceERCOrder } from "@features/transactions/hooks/usePlaceERCOrder";
 import {
+  defaultBuyAmount,
+  defaultSaleAmount,
+  FormErrors,
+  Option,
+  TokenAmount,
+} from "@features/transactions/write/placeErcOrderTransaction/types/ercOrderTxTypes";
+import {
   type SyntheticEvent,
   useCallback,
   useEffect,
@@ -14,40 +21,14 @@ import {
 import Select, { type SingleValue } from "react-select";
 import { type Address, formatUnits, parseUnits } from "viem";
 
-interface Option {
-  value: Address;
-  label: string;
-}
-interface TokenAmount {
-  amount: bigint;
-  units: number;
-}
-
-interface FormErrors {
-  buyAmount?: string;
-  saleAmount?: string;
-}
-
-const defaultSaleAmount = {
-  amount: 0n,
-  units: USDC.decimals,
-};
-
-const defaultBuyAmount = {
-  amount: 0n,
-  units: WBTC.decimals,
-};
-
 export default function ERCOrderTransactionRoute() {
   const [isApprovalPending, setIsApprovalPending] = useState(false);
-  const { isOrderConfirmed, isOrderPending, placeERCOrder } =
-    usePlaceERCOrder();
-
   const [formErrors, setFormErrors] = useState<FormErrors>({
     buyAmount: undefined,
     saleAmount: undefined,
   });
 
+  // TODO: remove this and formErrors state after adding form library
   const hasFormErrors = useMemo(
     () =>
       formErrors.buyAmount !== undefined || formErrors.saleAmount !== undefined,
@@ -58,6 +39,9 @@ export default function ERCOrderTransactionRoute() {
   const [saleAmount, setSaleAmount] = useState(defaultSaleAmount);
   const [buyingToken, setBuyingToken] = useState<Address>(WBTC.address);
   const [buyAmount, setBuyAmount] = useState<TokenAmount>(defaultBuyAmount);
+
+  const { isOrderConfirmed, isOrderPending, placeERCOrder } =
+    usePlaceERCOrder();
 
   const { allowance, isAllowanceLoading } =
     useCheckAllowanceAmount(sellingToken);
