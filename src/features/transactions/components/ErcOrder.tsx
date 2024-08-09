@@ -1,7 +1,10 @@
-import type { OpenERCOrdersType } from "@features/transactions/hooks/useGetOpenErcOrders";
+import type {
+  OpenERCOrder,
+  OpenERCOrderById,
+} from "@features/transactions/hooks/useGetOpenErcOrders";
 
 interface ErcOrderProps {
-  order: OpenERCOrdersType;
+  order: OpenERCOrderById | OpenERCOrder;
   orderNumber?: string;
 }
 
@@ -14,7 +17,7 @@ const structuredKeyNames = [
 ];
 
 export function ErcOrder({ order, orderNumber }: ErcOrderProps) {
-  const renderOrderValues = (order: OpenERCOrdersType) => {
+  const renderOrderValues = (order: OpenERCOrderById | OpenERCOrder) => {
     const values = Object.values(order);
     return structuredKeyNames.map((key, i) => (
       <p key={key}>

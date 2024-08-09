@@ -1,6 +1,5 @@
 import { ErcOrder } from "@features/transactions/components/ErcOrder";
 import { useGetErcOrderById } from "@features/transactions/hooks/useGetErcOrderById";
-import type { OpenERCOrdersType } from "@features/transactions/hooks/useGetOpenErcOrders";
 import { AcceptErcOrderTx } from "@features/transactions/write/acceptErcOrsderTransaction/components/AcceptErcOrderTx";
 
 export function ErcOrderToAccept({ orderId }: { orderId: bigint }) {
@@ -16,7 +15,7 @@ export function ErcOrderToAccept({ orderId }: { orderId: bigint }) {
         <h3>No order found!</h3>
       ) : (
         <>
-          <ErcOrder order={order as unknown as OpenERCOrdersType} />
+          <ErcOrder order={order} />
           <AcceptErcOrderTx
             orderId={orderId}
             saleAmount={order[0]}

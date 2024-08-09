@@ -1,7 +1,7 @@
 import { Heading, Input } from "@components";
 import { ErcOrder } from "@features/transactions/components/ErcOrder";
 import {
-  type OpenERCOrders,
+  OpenERCOrders,
   useGetOpenErcOrders,
 } from "@features/transactions/hooks/useGetOpenErcOrders";
 import { toAddress } from "@utils";
