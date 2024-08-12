@@ -11,7 +11,7 @@
 
 chainId: 111,\
 rpcUrl: https://testnet.rpc.gobob.xyz, \
-blockExplorer: https://testnet-explorer.gobob.xyz/, \
+blockExplorer: https://testnet-explorer.gobob.xyz/,
 
 5. install dependencies with any package manager - `pnpm install`
 6. launch app - `pnpm dev`
@@ -20,4 +20,4 @@ blockExplorer: https://testnet-explorer.gobob.xyz/, \
 
 The contract this POC interacts with is `0xE0Fd942cEa2f2e56f26AAC279F8D0F280bF52d7C`.
 
-You will find all the code and transaction details on the [blockscount site](https://testnet-explorer.gobob.xyz/address/0xE0Fd942cEa2f2e56f26AAC279F8D0F280bF52d7C?tab=contract_code).
+You will find all the code and transaction details on the [blockscout site](https://testnet-explorer.gobob.xyz/address/0xE0Fd942cEa2f2e56f26AAC279F8D0F280bF52d7C?tab=contract_code).
