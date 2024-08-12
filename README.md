@@ -10,8 +10,8 @@
 4. Bridge your Sepolia to the BOB testnet and get WBTC and USDC coins from that testnet. Follow the process [here](https://docs.gobob.xyz/docs/learn/guides/use-bob#bob-sepolia-testnet), and use the `old` testnet:
 
 chainId: 111,\
-rpcUrl: https://testnet.rpc.gobob.xyz,\
-blockExplorer: https://testnet-explorer.gobob.xyz/,\
+rpcUrl: https://testnet.rpc.gobob.xyz, \
+blockExplorer: https://testnet-explorer.gobob.xyz/, \
 
 5. install dependencies with any package manager - `pnpm install`
 6. launch app - `pnpm dev`
